@@ -1,10 +1,12 @@
 from django.conf import settings
-import requests
 from django.shortcuts import render
 from django.http import HttpResponse
+import requests
+from .models import User
 
 DISCORD_TOKEN_URL = 'https://discord.com/api/v10/oauth2/token'
-DISCORD_ME_URL = 'https://discord.com/api/v10/oauth2/@me'
+DISCORD_ME_URL = 'https://discord.com/api/v10/users/@me'
+
 
 def discord_callback(request):
     '''
@@ -30,5 +32,16 @@ def discord_callback(request):
     # Step 3: Fetch user info from Discord
     headers = {'Authorization': 'Bearer {}'.format(access_token)}
     resp = requests.get(DISCORD_ME_URL, headers=headers)
+    user_info = resp.json()
 
-    return HttpResponse('You are {}'.format(resp.json()['user']['username']))
+    # Step 4: Save user info in DB
+    username = user_info['username'] + '#' + user_info['discriminator']
+    user, created = User.objects.get_or_create(
+        username=username,
+        email=user_info['email'],
+        discord_id=user_info['id'],
+        discord_username=user_info['username'],
+        discord_discriminator=user_info['discriminator'],
+    )
+
+    return HttpResponse('You are {}, and are you a new account: {}'.format(username, created))
