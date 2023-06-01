@@ -37,11 +37,16 @@ def discord_callback(request):
     # Step 4: Save user info in DB
     username = user_info['username'] + '#' + user_info['discriminator']
     user, created = User.objects.get_or_create(
-        username=username,
-        email=user_info['email'],
         discord_id=user_info['id'],
-        discord_username=user_info['username'],
-        discord_discriminator=user_info['discriminator'],
+        defaults={
+            'username': username,
+            'email': user_info['email'],
+            'discord_discriminator': user_info['discriminator'],
+            'discord_username': user_info['username'],
+        }
     )
+    user.access_token = access_token
+    user.refresh_token = refresh_token
+    user.save()
 
     return HttpResponse('You are {}, and are you a new account: {}'.format(username, created))
