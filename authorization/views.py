@@ -3,6 +3,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 import requests
 from .models import User
+from guilds.models import Guild
 
 DISCORD_TOKEN_URL = 'https://discord.com/api/v10/oauth2/token'
 DISCORD_ME_URL = 'https://discord.com/api/v10/users/@me'
@@ -28,6 +29,7 @@ def discord_callback(request):
     resp = requests.post(DISCORD_TOKEN_URL, data=data, headers=headers)
     access_token = resp.json()['access_token']
     refresh_token = resp.json()['refresh_token']
+    guild_info = resp.json()['guild']
 
     # Step 3: Fetch user info from Discord
     headers = {'Authorization': 'Bearer {}'.format(access_token)}
@@ -36,7 +38,7 @@ def discord_callback(request):
 
     # Step 4: Save user info in DB
     username = user_info['username'] + '#' + user_info['discriminator']
-    user, created = User.objects.get_or_create(
+    user, user_created = User.objects.get_or_create(
         discord_id=user_info['id'],
         defaults={
             'username': username,
@@ -49,4 +51,14 @@ def discord_callback(request):
     user.refresh_token = refresh_token
     user.save()
 
-    return HttpResponse('You are {}, and are you a new account: {}'.format(username, created))
+    # Step 5: Create associated guild in DB
+    guild, guild_created = Guild.objects.get_or_create(
+        discord_id=guild_info['id'],
+        defaults={
+            'name': guild_info['name'],
+        }
+    )
+
+    guild.users.add(user)
+
+    return HttpResponse('You are {}, and are you a new account: {}. Guild {} is new: {}'.format(username, user_created, guild.discord_id, guild_created))
