@@ -86,7 +86,7 @@ DATABASES = {
 }
 
 # Custom Auth Model
-AUTH_USER_MODEL = 'authorization.User'
+AUTH_USER_MODEL = 'users.User'
 
 
 # Password validation
