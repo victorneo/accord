@@ -9,6 +9,23 @@ class Guild(models.Model):
     users = models.ManyToManyField(User, related_name='guilds')
 
 
+class GuildChannel(models.Model):
+    guild = models.ForeignKey(Guild, on_delete=models.CASCADE)
+    discord_id = models.CharField(max_length=200, null=False)
+    name = models.CharField(null=False, max_length=200)
+    channel_type = models.IntegerField(null=False)
+
+
+class ScheduledMessage(models.Model):
+    guild = models.ForeignKey(Guild, on_delete=models.CASCADE)
+    channel = models.ForeignKey(GuildChannel, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    message = models.TextField(null=False)
+
+    scheduled_time = models.DateTimeField(null=False)
+    published = models.BooleanField(default=False)
+
+
 # Event id, name, when to add to Discord
 class GuildEvent(models.Model):
     STAGE_INSTANCE = 1

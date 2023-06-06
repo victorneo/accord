@@ -3,9 +3,10 @@ from django.shortcuts import render
 from django.http import HttpResponse
 import requests
 from users.models import User
-from guilds.models import Guild
+from guilds.models import Guild, GuildChannel
 from discord.auth import get_access_token
 from discord.user import get_user_info
+from discord.guilds import get_guild_channels
 
 
 def discord_callback(request):
@@ -44,7 +45,20 @@ def discord_callback(request):
             'name': token.guild_info['name'],
         }
     )
-
     guild.users.add(user)
+
+    # Step 6: Create channels in guild
+    if guild_created:
+        discord_channels = get_guild_channels(settings.DISCORD_BOT_TOKEN, guild.discord_id)
+        channels = []
+        for c in discord_channels:
+            channels.append(GuildChannel(
+                guild=guild,
+                discord_id=c.discord_id,
+                name=c.name,
+                channel_type=c.channel_type))
+
+        GuildChannel.objects.bulk_create(channels)
+
 
     return HttpResponse('You are {}, and are you a new account: {}. Guild {} is new: {}'.format(username, user_created, guild.discord_id, guild_created))

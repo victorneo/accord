@@ -1,5 +1,4 @@
 import requests
-import json
 
 DISCORD_ME_URL = 'https://discord.com/api/v10/users/@me'
 
@@ -13,7 +12,7 @@ class DiscordUser(object):
 
 
 def get_user_info(token) -> DiscordUser:
-    headers = {'Authorization': 'Bearer {}'.format(token.access_token)}
+    headers = {'Authorization': 'Bearer {}'.format(token)}
     resp = requests.get(DISCORD_ME_URL, headers=headers)
     user_info = resp.json()
     return DiscordUser(user_info['id'], user_info['username'], user_info['discriminator'], user_info['email'])
