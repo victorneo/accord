@@ -10,7 +10,7 @@ class DiscordAccessToken(object):
         self.guild_info = guild_info
 
 
-def get_access_token(client_id, client_secret, redirect_uri, code) -> DiscordAccessToken:
+def get_access_token(client_id, client_secret, redirect_uri, code):
     data = {
         'client_id': client_id,
         'client_secret': client_secret,

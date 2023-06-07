@@ -9,5 +9,4 @@ class User(AbstractUser):
 
     access_token = models.CharField(null=True, max_length=50)
     refresh_token = models.CharField(null=True, max_length=50)
-    
     REQUIRED_FIELDS = ['discord_id', 'discord_username']

@@ -1,4 +1,3 @@
-from datetime import datetime
 import requests
 
 DISCORD_GUILD_CHANNELS_URL = 'https://discord.com/api/v10/guilds/{}/channels'
@@ -56,4 +55,3 @@ def send_message_to_channel(bot_token, channel_id, content):
     }
 
     resp = requests.post(DISCORD_GUILD_CREATE_MESSAGE_URL.format(channel_id), json=data, headers=headers)
-    print(resp.json())

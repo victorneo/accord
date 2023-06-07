@@ -8,6 +8,9 @@ class Guild(models.Model):
     name = models.CharField(null=False, max_length=200)
     users = models.ManyToManyField(User, related_name='guilds')
 
+    def __str__(self):
+        return f'{self.name} [{self.discord_id}]'
+
 
 class GuildChannel(models.Model):
     guild = models.ForeignKey(Guild, on_delete=models.CASCADE)
@@ -15,15 +18,23 @@ class GuildChannel(models.Model):
     name = models.CharField(null=False, max_length=200)
     channel_type = models.IntegerField(null=False)
 
+    def __str__(self):
+        return f'{self.guild.name} - {self.name} [{self.discord_id}]'
+
 
 class ScheduledMessage(models.Model):
     guild = models.ForeignKey(Guild, on_delete=models.CASCADE)
     channel = models.ForeignKey(GuildChannel, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
     message = models.TextField(null=False)
 
     scheduled_time = models.DateTimeField(null=False)
     published = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f'{self.guild.name} - {self.channel.name}'
+
+    def __repr__(self):
+        return self.__str__()
 
 
 # Event id, name, when to add to Discord
