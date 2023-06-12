@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class ActivitiesConfig(AppConfig):
+class CourseRemindersConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'activities'
+    name = 'course_reminders'

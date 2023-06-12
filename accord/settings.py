@@ -45,7 +45,7 @@ INSTALLED_APPS = [
     'users',
     'guilds',
     'authorization',
-    'activities',
+    'course_reminders',
 ]
 
 MIDDLEWARE = [

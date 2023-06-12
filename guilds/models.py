@@ -9,7 +9,7 @@ class Guild(models.Model):
     users = models.ManyToManyField(User, related_name='guilds')
 
     def __str__(self):
-        return f'{self.name} [{self.discord_id}]'
+        return f'{self.name}'
 
 
 class GuildChannel(models.Model):
