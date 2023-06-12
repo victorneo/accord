@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block body %}
+
+Hello
+
+<div id="main"></div>
+
+<a href="/partial1" hx-trigger="click" hx-target="#main" hx-swap="outerHTML">Partial 1</a>
+<br />
+<a href="/partial2" hx-trigger="click" hx-target="#main" hx-swap="outerHTML">Partial 2</a>
+
+{% endblock %}

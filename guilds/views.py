@@ -44,7 +44,6 @@ class ListChannelScheduledMessages(APIView):
         scheduled_time = request.data.get('scheduled_time')
         scheduled_time = datetime.strptime(scheduled_time, '%Y-%m-%dT%H:%M:%S.%f%z')
 
-        print(scheduled_time)
         sm = ScheduledMessage.objects.create(guild=channel.guild, channel=channel, message=message, scheduled_time=scheduled_time)
 
         return Response('success')

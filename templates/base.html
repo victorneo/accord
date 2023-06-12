@@ -1,0 +1,17 @@
+{% load django_htmx %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Accord</title>
+  </head>
+  <body>
+    {% block body %}{% endblock %}
+
+    <script src="{% static 'js/htmx.min.js' %}" defer></script>{# or however you include htmx #}
+    {% django_htmx_script %}
+  </body>
+</html>

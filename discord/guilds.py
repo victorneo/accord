@@ -4,9 +4,9 @@ DISCORD_GUILD_CHANNELS_URL = 'https://discord.com/api/v10/guilds/{}/channels'
 DISCORD_GUILD_CREATE_MESSAGE_URL = 'https://discord.com/api/v10/channels/{}/messages'
 
 DISCORD_CHANNEL_TYPES = {
-    0: 'text',
+    0: 'Text Channel',
     1: 'dm',
-    2: 'voice',
+    2: 'Voice Channel',
     3: 'group_dm',
     4: 'category',
     5: 'announcement',

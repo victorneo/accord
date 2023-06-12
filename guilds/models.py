@@ -67,3 +67,7 @@ class GuildEvent(models.Model):
     description = models.TextField(null=False)
 
     objects = GuildEventManager()
+
+
+    def __str__(self):
+        return f'{self.name} on {self.scheduled_start_time}'

@@ -9,6 +9,10 @@ from discord.user import get_user_info
 from discord.guilds import get_guild_channels
 
 
+def index(request):
+    return render(request, 'index.html')
+
+
 def discord_callback(request):
     '''
     Callback Params: discord/callback?code=&guild_id=&permissions=
@@ -52,6 +56,11 @@ def discord_callback(request):
         discord_channels = get_guild_channels(settings.DISCORD_BOT_TOKEN, guild.discord_id)
         channels = []
         for c in discord_channels:
+
+            # Skip channel groups
+            if c.channel_type == 4:
+                continue
+
             channels.append(GuildChannel(
                 guild=guild,
                 discord_id=c.discord_id,
@@ -60,5 +69,5 @@ def discord_callback(request):
 
         GuildChannel.objects.bulk_create(channels)
 
-
-    return HttpResponse('You are {}, and are you a new account: {}. Guild {} is new: {}'.format(username, user_created, guild.discord_id, guild_created))
+    msg = 'You are {}, and are you a new account: {}. Guild {} is new: {}'.format(username, user_created, guild.discord_id, guild_created)
+    return render(request, 'index.html', {'message': msg})
