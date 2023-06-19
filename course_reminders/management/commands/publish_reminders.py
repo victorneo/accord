@@ -13,12 +13,12 @@ class Command(BaseCommand):
         end = now + timedelta(days=7)
 
         courses = list(Course.objects.select_related('reminder_channel').all())
-        template = courses[0].reminder_template
         channel_messages = defaultdict(lambda: template + '\n\n')
 
         reminder_ids = []
 
         for c in courses:
+            template = c.reminder_template
             qm = c.coursereminder_set.filter(published=False, start_time__range=(now, end)).order_by('start_time').all()
 
             reminders = list(qm)
